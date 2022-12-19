@@ -1,5 +1,7 @@
 package myapp;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /*Write a simple login program in Java that 1) prompts the user for a username and password,
@@ -8,40 +10,49 @@ The program will continue to prompt the user for input until the correct usernam
 or until the user enters "q" to quit the program: */
 
 public class Login {
-    public static void main(String[] args) {
-      // Predefined username and password
-      String username = "admin";
-      String password = "password";
-  
-      // Create a Scanner object for reading input
-      Scanner scanner = new Scanner(System.in);
-  
-      while (true) {
-        // Prompt the user for a username
-        System.out.print("Enter username: ");
-        String inputUsername = scanner.nextLine();
-  
-        // If the user enters "q", exit the program
-        if (inputUsername.equals("q")) {
-          break;
-        }
-  
-        // Prompt the user for a password
-        System.out.print("Enter password: ");
-        String inputPassword = scanner.nextLine();
-  
-        // If the user enters "q", exit the program
-        if (inputPassword.equals("q")) {
-          break;
-        }
-  
-        // Check if the input matches the predefined username and password
-        if (inputUsername.equals(username) && inputPassword.equals(password)) {
-          System.out.println("Login successful!");
-          break;
-        } else {
-          System.out.println("Invalid username or password. Try again.");
-        }
+  // Define an enumeration for the user types
+  public enum UserType {
+    ADMIN,
+    MODERATOR,
+    USER
+  }
+
+  public static void main(String[] args) {
+    // Define a map to store the users and their corresponding user types
+    Map<String, UserType> users = new HashMap<>();
+    users.put("admin", UserType.ADMIN);
+    users.put("moderator", UserType.MODERATOR);
+    users.put("user", UserType.USER);
+
+    // Create a Scanner to read input from the command line
+    Scanner scanner = new Scanner(System.in);
+
+    // Prompt the user for a username and password
+    System.out.print("Enter username: ");
+    String username = scanner.nextLine();
+    System.out.print("Enter password: ");
+    String password = scanner.nextLine();
+
+    // Verify the input against the correct username and password
+    while (!users.containsKey(username) || !password.equals("password")) {
+      // If the input is incorrect, display an error message
+      System.out.println("Incorrect username or password. Try again or enter 'q' to quit.");
+
+      // Prompt the user for a username and password again
+      System.out.print("Enter username: ");
+      username = scanner.nextLine();
+      System.out.print("Enter password: ");
+      password = scanner.nextLine();
+
+      // If the user enters "q", exit the loop and terminate the program
+      if (username.equals("q")) {
+        break;
       }
-    }// main
-  }// class
+    }
+
+    // If the input is correct, display the user's type
+    if (users.containsKey(username) && password.equals("password")) {
+      System.out.println("Login successful! You are a " + users.get(username) + ".");
+    }
+  }
+}
